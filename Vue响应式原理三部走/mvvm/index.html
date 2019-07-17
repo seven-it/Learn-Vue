@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <h1>{{name}}</h1>
+        <p>身份：{{about.title}}</p>
+        <p>梦想：找到{{about.dream}} {{about.fruit}}，并成为海贼王。</p>
+        <p>恶魔果实：{{about.fruit}}。</p>
+        他的标志性特征是一顶草帽，因此常被直接称呼为“{{about.alias}}”
+    </div>
+    <!--实现的mvvm-->
+    <script src="./mvvm.js"></script>
+    <script>
+        let mvvm = new Mvvm({
+            el: '#app',
+            data: { 
+                name: '蒙奇·D·路飞',
+                about: {
+                    title: '草帽海贼团船长',
+                    dream: 'ONE PIECE',
+                    fruit: '超人系橡胶果实',
+                    alias: '草帽'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
