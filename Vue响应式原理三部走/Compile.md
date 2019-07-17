@@ -91,14 +91,17 @@
                 
                 // 文本节点 并且有{{}}
                 if(node.nodeType === 3 && reg.test(txt)) {
-                    // 获取到第一个分组 a.b.c
-                    let arr = RegExp.$1.split('.') // [a,b,c]
-                    let val = arr.reduce((val, key) => {
-                        return val[key]  // val = vm.a.b.c
-                    }, vm)
+                    function replaceTxt() {
+                        node.textContent = txt.replace(reg, (matched, placeholder) => {  
+                            console.log(placeholder)  // 匹配到的内容 a.b.c
+                            return placeholder.split('.').reduce((val, key) => {
+                                return val[key]; // val = vm.a.b.c
+                            }, vm);
+                        });
+                    };
                     
-                    // 替换内容
-                    node.textContent = txt.replace(reg, val).trim()
+                    // 替换
+                    replaceTxt();
                 }
                 
                 // 递归 替换更层次节点
