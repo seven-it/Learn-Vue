@@ -4,6 +4,12 @@
 2. 通过模板编译进行数据渲染
 3. 通过发布订阅模式实现视图与数据的同步
 
+[Vue 响应式原理简易 MVVM 三步走第一步 (数据劫持）](https://juejin.im/post/5d2d6bad6fb9a07ef710a683)
+
+[Vue响应式原理简易Mvvm三步走第二步 (模板解析）](https://juejin.im/post/5d2e8efff265da1bbd4ba9d5)
+
+[Vue响应式原理简易Mvvm三步走第三步 (发布-订阅）](https://juejin.im/post/5d2ecfc3f265da1ba84ac616)
+
 ![image](https://github.com/seven-it/Learn-Vue/blob/master/Vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86%E4%B8%89%E9%83%A8%E8%B5%B0/images/00.png)
 
 **下面我们将通过这三点来实现一个简易的mvvm, 从而加深对Vue响应式的理解**
