@@ -1,7 +1,12 @@
 ## 前言
 **上一篇我们完成了第一步 (数据劫持)，从而完成了对属性的监听，这一篇我们来完成最后一步（发布-订阅）**
 
+[Vue 响应式原理简易 MVVM 三步走第一步 (数据劫持）](https://juejin.im/post/5d2d6bad6fb9a07ef710a683)
+
 [Vue响应式原理简易Mvvm三步走第二步 (模板解析）](https://juejin.im/post/5d2e8efff265da1bbd4ba9d5)
+
+[Vue响应式原理简易Mvvm三步走第三步 (发布-订阅）](https://juejin.im/post/5d2ecfc3f265da1ba84ac616)
+
 
 发布订阅的关系主要靠数组来维护，订阅就是将函数添加到数组，发布就是将数组中的函数执行
 
