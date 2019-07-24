@@ -11,7 +11,9 @@ import { initProvide, initInjections } from './inject'
 import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
-
+/**
+ * @param {Function} Vue vue构造函数
+ */
 export function initMixin (Vue: Class<Component>) {
   /**
    * 初始化方法
@@ -32,6 +34,7 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
+    debugger
     // merge options
     if (options && options._isComponent) {
       // optimize internal component instantiation
@@ -39,9 +42,9 @@ export function initMixin (Vue: Class<Component>) {
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
-      // 将选项对象挂载到vue 实例对象上
+      // 合并选项对象，并添加到vue实例对象上
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor),
+        resolveConstructorOptions(vm.constructor), // 解析构造函数选项
         options || {},
         vm
       )
@@ -96,7 +99,7 @@ export function initInternalComponent (vm: Component, options: InternalComponent
 }
 
 export function resolveConstructorOptions (Ctor: Class<Component>) {
-  let options = Ctor.options
+  let options = Ctor.options // 构造函数的选项对象
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions
