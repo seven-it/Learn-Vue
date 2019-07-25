@@ -53,16 +53,20 @@ if (process.env.NODE_ENV !== 'production') {
     })
   }
 
+  // 对属性访问进行一层代理
   const hasHandler = {
     has (target, key) {
-      const has = key in target
+      // vue最终会将$data中的属性代理到自身实例上，但是不会代理 $,_ 开头的属性
+      const has = key in target // 如果返回false 那么key一定是以$或_为开头的属性
       const isAllowed = allowedGlobals(key) ||
         (typeof key === 'string' && key.charAt(0) === '_' && !(key in target.$data))
+      
+      // 如果这个key 在vm自身及其原型链上不存在，并且不是关键字 或 用户定义在data中的属性
       if (!has && !isAllowed) {
-        if (key in target.$data) warnReservedPrefix(target, key)
-        else warnNonPresent(target, key)
+        if (key in target.$data) warnReservedPrefix(target, key) // 打印警告 $或_开头的属性必须以$data.key的形式来调用
+        else warnNonPresent(target, key)  // 打印警告 当前属性未定义
       }
-      return has || !isAllowed
+      return has || !isAllowed  // 返回布尔值 暂时不知在哪使用***
     }
   }
 

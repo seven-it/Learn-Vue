@@ -23,13 +23,21 @@
   </head>
   <body>
     <div id="demo">
-      {{msg}}
+      {{msg}}{{$data.$c}}
     </div>
     <script>
-      new Vue({
+      const vm = new Vue({
         el: '#demo',
         data: {
-          msg: 'Hello world'
+          msg: 'Hello world',
+          $c:00,
+          _o1:11
+        },
+        created() {
+          console.log(this.$data.$c)
+        },
+        methods: {
+          
         },
       })
     </script>
