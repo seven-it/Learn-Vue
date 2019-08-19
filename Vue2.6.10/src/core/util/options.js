@@ -33,6 +33,7 @@ const strats = config.optionMergeStrategies
  */
 if (process.env.NODE_ENV !== 'production') {
   strats.el = strats.propsData = function (parent, child, vm, key) {
+    // 如果vm不是一个实例对象，那么警告开发者必须使用new来实例化Vue
     if (!vm) {
       warn(
         `option "${key}" can only be used during instance ` +
@@ -101,6 +102,7 @@ export function mergeDataOrFn (
       )
     }
   } else {
+    // 返回一个回调函数，闭包
     return function mergedInstanceDataFn () {
       // instance merge
       const instanceData = typeof childVal === 'function'
@@ -180,17 +182,22 @@ LIFECYCLE_HOOKS.forEach(hook => {
  * a three-way merge between constructor options, instance
  * options and parent options.
  */
+// 如果实例对象与构造函数存在相同的属性，那么将两者进行合并
 function mergeAssets (
-  parentVal: ?Object,
+  parentVal: ?Object, // 
   childVal: ?Object,
   vm?: Component,
   key: string
 ): Object {
+  // 如果parentVal存在则创建一个新的子类
   const res = Object.create(parentVal || null)
+
+  // 如果childVal也存在，则将与parentVal合并
   if (childVal) {
     process.env.NODE_ENV !== 'production' && assertObjectType(key, childVal, vm)
     return extend(res, childVal)
   } else {
+    // 没有则返回 parentVal
     return res
   }
 }
@@ -390,16 +397,22 @@ export function mergeOptions (
   child: Object,
   vm?: Component
 ): Object {
+  debugger
+  // 是否有components属性
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
   }
 
+  // 选项对象如果是一个函数
   if (typeof child === 'function') {
     child = child.options
   }
 
+  // 如果选项对象中存在props，对其进行一些操作
   normalizeProps(child, vm)
+  // 如果存在inject属性，对其进行一些操作
   normalizeInject(child, vm)
+  // 如果存在directives属性，对其进行一些操作
   normalizeDirectives(child)
 
   // Apply extends and mixins on the child options,
@@ -407,9 +420,12 @@ export function mergeOptions (
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
   if (!child._base) {
+    // 如果存在extends属性，对其进行一些操作
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
     }
+
+    // 如果存在mixins属性，对其进行一些操作
     if (child.mixins) {
       for (let i = 0, l = child.mixins.length; i < l; i++) {
         parent = mergeOptions(parent, child.mixins[i], vm)
@@ -417,10 +433,13 @@ export function mergeOptions (
     }
   }
 
-  const options = {}
+  // 声明一个空的options对象，
+  // 为了将构造函数的属性与传入的选项对象进行合并，
+  // 最终返回一个合并后的选项对象。
+  const options = {}  
   let key
   for (key in parent) {
-    mergeField(key)
+    mergeField(key) // 合并域
   }
   for (key in child) {
     if (!hasOwn(parent, key)) {

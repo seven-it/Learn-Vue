@@ -19,9 +19,10 @@ Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
 ): Component {
-  el = el && query(el)
+  el = el && query(el) // 获取dome节点
 
   /* istanbul ignore if */
+  /* 获取的节点不能是body或者html节点 */
   if (el === document.body || el === document.documentElement) {
     process.env.NODE_ENV !== 'production' && warn(
       `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
@@ -29,8 +30,9 @@ Vue.prototype.$mount = function (
     return this
   }
 
-  const options = this.$options
+  const options = this.$options // 保存选项对象
   // resolve template/el and convert to render function
+  // 是否使用了render函数
   if (!options.render) {
     let template = options.template
     if (template) {
@@ -54,9 +56,9 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
-      template = getOuterHTML(el)
+      template = getOuterHTML(el)  // 获取元素的所有节点
     }
-    if (template) {
+    if (template) { // 拿到元素所有节点后进行操作
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile')

@@ -29,6 +29,7 @@ export function setActiveInstance(vm: Component) {
   }
 }
 
+// 这个函数主要就是进行属性的初始化操作
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 
@@ -41,12 +42,14 @@ export function initLifecycle (vm: Component) {
     parent.$children.push(vm)
   }
 
+  // 下面开始初始化一些实例属性，在vueAPi中都有存在
   vm.$parent = parent
   vm.$root = parent ? parent.$root : vm
 
   vm.$children = []
   vm.$refs = {}
 
+  // 下面是一些私有实例属性，暂时不知有什么用
   vm._watcher = null
   vm._inactive = null
   vm._directInactive = false
