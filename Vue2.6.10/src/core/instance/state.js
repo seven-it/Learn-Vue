@@ -46,12 +46,12 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 }
 
 export function initState (vm: Component) {
-  vm._watchers = []
-  const opts = vm.$options
-  if (opts.props) initProps(vm, opts.props)
-  if (opts.methods) initMethods(vm, opts.methods)
+  vm._watchers = []  // 暂时不知
+  const opts = vm.$options // 保存选项对象
+  if (opts.props) initProps(vm, opts.props) // 如果有props 初始化
+  if (opts.methods) initMethods(vm, opts.methods) // 初始化methods
   if (opts.data) {
-    initData(vm)
+    initData(vm)  // 初始化data
   } else {
     observe(vm._data = {}, true /* asRootData */)
   }
@@ -111,6 +111,7 @@ function initProps (vm: Component, propsOptions: Object) {
 
 function initData (vm: Component) {
   let data = vm.$options.data
+  // data 有两种形式，在根节点时可以是对象或函数，在子组件中必须是函数
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
@@ -143,7 +144,8 @@ function initData (vm: Component) {
         `Use prop default value instead.`,
         vm
       )
-    } else if (!isReserved(key)) {
+    } else if (!isReserved(key)) {  // 判断，如果属性是$或_开头的，不会代理
+      // 将_data中的属性代理到vm实例上 
       proxy(vm, `_data`, key)
     }
   }
@@ -155,7 +157,7 @@ export function getData (data: Function, vm: Component): any {
   // #7573 disable dep collection when invoking data getters
   pushTarget()
   try {
-    return data.call(vm, vm)
+    return data.call(vm, vm)  // 在merageOptions时data被包装成一个函数，这里执行data
   } catch (e) {
     handleError(e, vm, `data()`)
     return {}
