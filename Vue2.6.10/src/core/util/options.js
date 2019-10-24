@@ -397,7 +397,6 @@ export function mergeOptions (
   child: Object,
   vm?: Component
 ): Object {
-  debugger
   // 是否有components属性
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)

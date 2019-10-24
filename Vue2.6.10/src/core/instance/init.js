@@ -60,6 +60,7 @@ export function initMixin (Vue: Class<Component>) {
     vm._self = vm
     initLifecycle(vm) // 这个函数主要就是进行属性的初始化操作
     initEvents(vm)
+    
     initRender(vm)
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props

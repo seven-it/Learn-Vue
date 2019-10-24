@@ -48,8 +48,8 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 export function initState (vm: Component) {
   vm._watchers = []
   const opts = vm.$options
-  if (opts.props) initProps(vm, opts.props)
-  if (opts.methods) initMethods(vm, opts.methods)
+  if (opts.props) initProps(vm, opts.props)  // 如果有props ？
+  if (opts.methods) initMethods(vm, opts.methods)  // 如果有methods属性 ？
   if (opts.data) {
     initData(vm)
   } else {
@@ -109,8 +109,9 @@ function initProps (vm: Component, propsOptions: Object) {
   toggleObserving(true)
 }
 
+// 初始化data
 function initData (vm: Component) {
-  let data = vm.$options.data
+  let data = vm.$options.data  // 这里data被mergeOptions包装成了一个闭包函数
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
