@@ -54,7 +54,7 @@ function decodeAttr (value, shouldDecodeNewlines) {
 export function parseHTML (html, options) {
   const stack = []
   const expectHTML = options.expectHTML
-  const isUnaryTag = options.isUnaryTag || no
+  const isUnaryTag = options.isUnaryTag || no  // 是否是单标签
   const canBeLeftOpenTag = options.canBeLeftOpenTag || no
   let index = 0
   let last, lastTag
@@ -166,7 +166,7 @@ export function parseHTML (html, options) {
       html = rest
       parseEndTag(stackedTag, index - endTagLength, index)
     }
-
+ 
     if (html === last) {
       options.chars && options.chars(html)
       if (process.env.NODE_ENV !== 'production' && !stack.length && options.warn) {
