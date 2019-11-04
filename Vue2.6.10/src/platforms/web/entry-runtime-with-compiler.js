@@ -32,9 +32,10 @@ Vue.prototype.$mount = function (
 
   const options = this.$options // 保存选项对象
   // resolve template/el and convert to render function
-  // 是否使用了render函数
+  // 选项中不存在render时命中
   if (!options.render) {
     let template = options.template
+    //选项中存在template时命中
     if (template) {
       if (typeof template === 'string') {
         if (template.charAt(0) === '#') {
@@ -56,13 +57,15 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
-      template = getOuterHTML(el)  // 获取元素的所有节点
+      // 选项中不存在template时，通过el来获取dom内容
+      template = getOuterHTML(el)
     }
-    if (template) { // 拿到元素所有节点后进行操作
+    if (template) { 
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile')
       }
+      // 编译dom并将其转换为render函数
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
@@ -70,7 +73,8 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
-      debugger
+
+      // 将编译好的render添加到选项对象中
       options.render = render
       options.staticRenderFns = staticRenderFns
 
@@ -81,6 +85,9 @@ Vue.prototype.$mount = function (
       }
     }
   }
+
+  // 继续调用$mount ，通过第一次执行$mount ，
+  // options中必包含render,这次调用就为了解析render函数实现最终挂在
   return mount.call(this, el, hydrating)
 }
 

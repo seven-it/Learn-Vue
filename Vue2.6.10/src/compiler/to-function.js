@@ -19,13 +19,15 @@ function createFunction (code, errors) {
 }
 
 export function createCompileToFunctionFn (compile: Function): Function {
+  // 缓存对象 优化性能
   const cache = Object.create(null)
   return function compileToFunctions (
     template: string,
     options?: CompilerOptions,
     vm?: Component
   ): CompiledFunctionResult {
-    options = extend({}, options)
+    // 不知道有什么作用 ？？？
+    options = extend({}, options)  
     const warn = options.warn || baseWarn
     delete options.warn
 
@@ -55,7 +57,8 @@ export function createCompileToFunctionFn (compile: Function): Function {
       return cache[key]
     }
 
-    // compile
+    // compile 
+    // 编译函数 将真是的dom编译为AST
     const compiled = compile(template, options)
 
     // check compilation errors/tips
@@ -89,6 +92,8 @@ export function createCompileToFunctionFn (compile: Function): Function {
     // turn code into functions
     const res = {}
     const fnGenErrors = []
+
+    // 将render字符串转换为真正的函数
     res.render = createFunction(compiled.render, fnGenErrors)
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)
@@ -108,6 +113,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
       }
     }
 
+    // 缓存当前dom 当再次编译时遇到相同的内容直接返回，优化编译性能
     return (cache[key] = res)
   }
 }
