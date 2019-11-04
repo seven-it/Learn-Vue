@@ -20,7 +20,9 @@ export function initMixin (Vue: Class<Component>) {
    * @param { object } 选项对象
    */
   Vue.prototype._init = function (options?: Object) {
-    const vm: Component = this // 保存实例对象
+    // 保存new出来的vue实例对象
+    // 疑问？：为什么要用常量保存起来，而不直接使用this对象
+    const vm: Component = this 
     // a uid
     vm._uid = uid++
 
@@ -33,15 +35,20 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     // a flag to avoid this being observed
+    // 猜测： vue实例对象不会被observe监测
     vm._isVue = true
+
     // merge options
+    /**
+     * 合并选项，将vue构造函数上的自定义属性与用户传入的options中的属性进行合并
+     */
     if (options && options._isComponent) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
-      // 合并选项对象，并添加到vue实例对象上
+      // 合并选项对象，并添加到vue实例对象上，
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor), // 解析构造函数选项
         options || {},
@@ -50,6 +57,7 @@ export function initMixin (Vue: Class<Component>) {
     }
     
     /* istanbul ignore else */
+    // 为vm添加一个代理对象，该对象也就是vm本身
     if (process.env.NODE_ENV !== 'production') {
       initProxy(vm)
     } else {
@@ -57,13 +65,58 @@ export function initMixin (Vue: Class<Component>) {
     }
     
     // expose real self
+    // 疑问？ _self有什么用
     vm._self = vm
-    initLifecycle(vm) // 这个函数主要就是进行属性的初始化操作
+
+    /**
+     * initLifecycle(vm) 定义一些可供调用的实例属性，以及一些实例的私有属性
+     * 有以下实例属性
+     * $parent
+     * $root 
+     * $children []
+     * $refs {}
+     * 
+     * 以下私有属性
+     * _watcher = null
+     * _inactive = null
+     * _directInactive = false
+     * _isMounted = false
+     * _isDestroyed = false
+     * _isBeingDestroyed = false
+     */
+    initLifecycle(vm) 
+
+    // 事件有关 ，暂时跳过
     initEvents(vm)
     
+    /**
+     * initRender(vm) 初始化一些与render相关的属性
+     * _vnode = null
+     * _staticTrees = null
+     * _c
+     * 
+     * $slots
+     * $scopedSlots
+     * $createElement
+     * 
+     * 被数据劫持的属性
+     * $attrs
+     * $listeners
+     */
     initRender(vm)
+
+    // 触发生命周期钩子
     callHook(vm, 'beforeCreate')
+
+    // 数据注入
     initInjections(vm) // resolve injections before data/props
+
+    /**
+     * 初始化data， props，computed ，watch
+     * 并将data中的属性代理到vm实例中，如 vm.msg === vm.data.msg
+     * 并且对data中的数据进行observe
+     * 
+     */
     initState(vm)
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
@@ -76,6 +129,7 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     if (vm.$options.el) {
+      // 数据初始化完毕 开始挂载
       vm.$mount(vm.$options.el)
     }
   }
