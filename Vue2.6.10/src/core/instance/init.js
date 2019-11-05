@@ -48,7 +48,11 @@ export function initMixin (Vue: Class<Component>) {
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
-      // 合并选项对象，并添加到vue实例对象上，
+      /**
+       * 合并选项函数
+       * 将vue构造函数中的原生选项与用户传入的自定义选项合并
+       * 合并完成挂在到实例对象的$options属性上
+       */
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor), // 解析构造函数选项
         options || {},
@@ -117,6 +121,7 @@ export function initMixin (Vue: Class<Component>) {
      * 并且对data中的数据进行observe
      * 
      */
+    debugger
     initState(vm)
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
@@ -155,7 +160,15 @@ export function initInternalComponent (vm: Component, options: InternalComponent
 }
 
 export function resolveConstructorOptions (Ctor: Class<Component>) {
-  let options = Ctor.options // 构造函数的选项对象
+  // 构造函数的选项对象
+  /**
+   * 选项对象中包含了原生组件与api
+   * components: {KeepAlive: {…}, Transition: {…}, TransitionGroup: {…}}
+   * directives: {model: {…}, show: {…}}
+   * filters: {}
+   * _base: ƒ Vue(options)
+   */
+  let options = Ctor.options 
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions

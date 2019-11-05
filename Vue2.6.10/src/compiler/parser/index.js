@@ -201,6 +201,7 @@ export function parse (
     }
   }
 
+  // 解析html
   parseHTML(template, {
     warn,
     expectHTML: options.expectHTML,

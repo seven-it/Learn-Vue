@@ -194,6 +194,8 @@ export function parseHTML (html, options) {
       }
       advance(start[0].length)
       let end, attr
+
+      // 截取之后的html不是结束标签，并且包含有原生属性或者vue属性
       while (!(end = html.match(startTagClose)) && (attr = html.match(dynamicArgAttribute) || html.match(attribute))) {
         attr.start = index
         advance(attr[0].length)

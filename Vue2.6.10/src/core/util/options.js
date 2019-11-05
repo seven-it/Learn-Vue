@@ -102,7 +102,7 @@ export function mergeDataOrFn (
       )
     }
   } else {
-    // 返回一个回调函数，闭包
+    // data被包装为一个函数返回，在initState时调用该函数来初始化data
     return function mergedInstanceDataFn () {
       // instance merge
       const instanceData = typeof childVal === 'function'
@@ -112,6 +112,7 @@ export function mergeDataOrFn (
         ? parentVal.call(vm, vm)
         : parentVal
       if (instanceData) {
+        // 这里是真正的合并data并返回一个对象
         return mergeData(instanceData, defaultData)
       } else {
         return defaultData

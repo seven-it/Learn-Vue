@@ -41,8 +41,10 @@ export class Observer {
 
   constructor (value: any) {
     this.value = value
+    // 实例化一个收集器
     this.dep = new Dep()
     this.vmCount = 0
+    // 将Observer实例对象添加到 vm._data上
     def(value, '__ob__', this)
     if (Array.isArray(value)) {
       if (hasProto) {
@@ -52,6 +54,7 @@ export class Observer {
       }
       this.observeArray(value)
     } else {
+      // 为_data对象的所有属性添加getter和setter
       this.walk(value)
     }
   }
@@ -108,10 +111,12 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
+  // 如果data中的数据不是对象或者是一个vnode实例
   if (!isObject(value) || value instanceof VNode) {
     return
   }
   let ob: Observer | void
+  // 已经被观察的对象不再重新观察
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
@@ -121,6 +126,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
+    // 开始添加观察
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -139,8 +145,10 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 实例化一个收集器
   const dep = new Dep()
 
+  // 获取属性的描述信息
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -153,7 +161,10 @@ export function defineReactive (
     val = obj[key]
   }
 
+  // 如果val是一个对象 那么递归为其添加观察者
   let childOb = !shallow && observe(val)
+
+  // 对val进行数据劫持，添加get 和 set
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,

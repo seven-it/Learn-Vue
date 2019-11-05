@@ -36,6 +36,7 @@ const sharedPropertyDefinition = {
 }
 
 export function proxy (target: Object, sourceKey: string, key: string) {
+  // 将vm._data中的数据代理到vm实例上，方便给访问与书写
   sharedPropertyDefinition.get = function proxyGetter () {
     return this[sourceKey][key]
   }
@@ -51,6 +52,9 @@ export function initState (vm: Component) {
   if (opts.props) initProps(vm, opts.props) // 如果有props 初始化
   if (opts.methods) initMethods(vm, opts.methods) // 初始化methods
   if (opts.data) {
+    /**
+     * 这里真正开始初始化用户传入的data
+     */
     initData(vm)  // 初始化data
   } else {
     observe(vm._data = {}, true /* asRootData */)
@@ -111,8 +115,12 @@ function initProps (vm: Component, propsOptions: Object) {
 
 // 初始化data
 function initData (vm: Component) {
+  // 保存用户传入的data
   let data = vm.$options.data
-  // data 有两种形式，在根节点时可以是对象或函数，在子组件中必须是函数
+  /**
+   * 这里的data经过之前的 mergeOptions 被包装成了一个函数，所以命中getData
+   * 并将数据添加到vm._data上
+   */
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
@@ -125,6 +133,7 @@ function initData (vm: Component) {
     )
   }
   // proxy data on instance
+  // 在vm实例上代理data中的数据
   const keys = Object.keys(data)
   const props = vm.$options.props
   const methods = vm.$options.methods
@@ -151,6 +160,7 @@ function initData (vm: Component) {
     }
   }
   // observe data
+  // 数据初始化完毕 需要监听数据来实现数据响应
   observe(data, true /* asRootData */)
 }
 
@@ -158,7 +168,8 @@ export function getData (data: Function, vm: Component): any {
   // #7573 disable dep collection when invoking data getters
   pushTarget()
   try {
-    return data.call(vm, vm)  // 在merageOptions时data被包装成一个函数，这里执行data
+    // 在merageOptions时data被包装成一个函数，这里执行data
+    return data.call(vm, vm)  
   } catch (e) {
     handleError(e, vm, `data()`)
     return {}
