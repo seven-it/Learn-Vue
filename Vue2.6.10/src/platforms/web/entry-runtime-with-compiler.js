@@ -90,6 +90,7 @@ Vue.prototype.$mount = function (
 
   // 继续调用$mount ，通过第一次执行$mount ，
   // options中必包含render,这次调用就为了解析render函数实现最终挂在
+  debugger
   return mount.call(this, el, hydrating)
 }
 
