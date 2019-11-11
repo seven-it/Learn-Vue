@@ -23,13 +23,18 @@
   </head>
   <body>
     <div id="demo">
-      {{msg}}
+      {{msg}} {{obj.name}} {{arr[0]}}
     </div>
     <script>
+      debugger
       const vm = new Vue({
         el: '#demo',
         data: {
-          msg: 'Hello world'
+          msg: 'Hello world',
+          arr: [0,1,2,3],
+          obj: {
+            name: '小七'
+          }
         },
       })
     </script>

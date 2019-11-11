@@ -121,7 +121,6 @@ export function initMixin (Vue: Class<Component>) {
      * 并且对data中的数据进行observe
      * 
      */
-    debugger
     initState(vm)
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
