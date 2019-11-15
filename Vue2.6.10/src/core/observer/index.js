@@ -111,7 +111,7 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
-  // 如果data中的数据不是对象或者是一个vnode实例
+  // 如果传入得数据不是一个对象 或者是一个vnode实例
   if (!isObject(value) || value instanceof VNode) {
     return
   }

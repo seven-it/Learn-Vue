@@ -256,6 +256,10 @@ strats.computed = function (
   key: string
 ): ?Object {
   if (childVal && process.env.NODE_ENV !== 'production') {
+    /**
+     * assertObjectType 用来检测childVal是否为Object类型，
+     * 不是得话会打印警告信息
+     */
     assertObjectType(key, childVal, vm)
   }
   if (!parentVal) return childVal
@@ -303,37 +307,55 @@ export function validateComponentName (name: string) {
  * Ensure all props option syntax are normalized into the
  * Object-based format.
  */
+/**
+ * props 的值只有两种类型，Array, Object
+ * 不同的类型会走不同的逻辑分支，最终输出统一格式化之后的props
+ */
 function normalizeProps (options: Object, vm: ?Component) {
   const props = options.props
+  // 没有props属性就直接return
   if (!props) return
+  
+  // 声明一个对象，该对象用来保存格式化之后的数据
+  // 也就是说：不论传入的是Array 还是 Object,最终都将被转换为Object类型
   const res = {}
   let i, val, name
+
+  // 如果props是数组类型
   if (Array.isArray(props)) {
     i = props.length
+    // 遍历数组的每一项
     while (i--) {
       val = props[i]
+      // 数组中的每一项值都必须是一个String类型，如果不是则会报出警告
       if (typeof val === 'string') {
-        name = camelize(val)
-        res[name] = { type: null }
+        name = camelize(val) // 针对属性名为驼峰格式
+
+        // 将数组中的每一项转为以下对象类型
+        res[name] = { type: null } // 字符串转为对象
       } else if (process.env.NODE_ENV !== 'production') {
         warn('props must be strings when using array syntax.')
       }
     }
   } else if (isPlainObject(props)) {
+    // 如果props 是一个对象， 遍历每一个属性
     for (const key in props) {
       val = props[key]
       name = camelize(key)
+      // props为对象时，它得属性也要是对象类型，如果不是则转为对象类型
       res[name] = isPlainObject(val)
         ? val
         : { type: val }
     }
   } else if (process.env.NODE_ENV !== 'production') {
+    // props 必须是数组或者对象类型
     warn(
       `Invalid value for option "props": expected an Array or an Object, ` +
       `but got ${toRawType(props)}.`,
       vm
     )
   }
+  // 将最后格式化的数据添加到props上
   options.props = res
 }
 
@@ -380,6 +402,7 @@ function normalizeDirectives (options: Object) {
 }
 
 function assertObjectType (name: string, value: any, vm: ?Component) {
+  // 传入的值必须是Object类，否则打印警告
   if (!isPlainObject(value)) {
     warn(
       `Invalid value for option "${name}": expected an Object, ` +
@@ -408,7 +431,7 @@ export function mergeOptions (
     child = child.options
   }
 
-  // 如果选项对象中存在props，对其进行一些操作
+  // 如果选项对象中存在props，将props与props属性转为Object 类型
   normalizeProps(child, vm)
   // 如果存在inject属性，对其进行一些操作
   normalizeInject(child, vm)

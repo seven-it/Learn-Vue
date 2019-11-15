@@ -29,6 +29,10 @@
       debugger
       const vm = new Vue({
         el: '#demo',
+        props:['prop'],
+        propsData:{
+          prop: {missage: 123}
+        },
         data: {
           msg: 'Hello world',
           arr: [0,1,2,3],

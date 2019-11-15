@@ -66,7 +66,12 @@ export function initState (vm: Component) {
 }
 
 function initProps (vm: Component, propsOptions: Object) {
+  /**
+   * propsData 
+   * vue提供的api，类似于props的初始数据 default
+   */
   const propsData = vm.$options.propsData || {}
+  // 为vm添加一个_props属性，应该与_data属性的作用类似
   const props = vm._props = {}
   // cache prop keys so that future props updates can iterate using Array
   // instead of dynamic object key enumeration.
@@ -76,8 +81,11 @@ function initProps (vm: Component, propsOptions: Object) {
   if (!isRoot) {
     toggleObserving(false)
   }
+
+  // 遍历props 中的属性
   for (const key in propsOptions) {
     keys.push(key)
+    // 对属性值进行校验
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
