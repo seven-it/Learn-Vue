@@ -43,6 +43,7 @@ export default class Dep {
       // order
       subs.sort((a, b) => a.id - b.id)
     }
+    // 遍历wathcer调用其update()
     for (let i = 0, l = subs.length; i < l; i++) {
       subs[i].update()
     }

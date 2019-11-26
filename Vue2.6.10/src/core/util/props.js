@@ -32,7 +32,7 @@ export function validateProp (
   // boolean casting
   const booleanIndex = getTypeIndex(Boolean, prop.type)
   if (booleanIndex > -1) {
-    if (absent && !hasOwn(prop, 'default'))undefined {
+    if (absent && !hasOwn(prop, 'default')) {
       value = false
     } else if (value === '' || value === hyphenate(key)) {
       // only cast empty string / same name to boolean if

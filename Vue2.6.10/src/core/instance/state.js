@@ -59,6 +59,7 @@ export function initState (vm: Component) {
   } else {
     observe(vm._data = {}, true /* asRootData */)
   }
+  // 初始化computed
   if (opts.computed) initComputed(vm, opts.computed)
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
@@ -194,8 +195,11 @@ function initComputed (vm: Component, computed: Object) {
   // computed properties are just getters during SSR
   const isSSR = isServerRendering()
 
+  // 遍历computed的属性
   for (const key in computed) {
+    // 保存属性值，一个函数
     const userDef = computed[key]
+    // computed的属性值有两种情况，函数 与 访问器属性
     const getter = typeof userDef === 'function' ? userDef : userDef.get
     if (process.env.NODE_ENV !== 'production' && getter == null) {
       warn(
@@ -283,8 +287,10 @@ function createGetterInvoker(fn) {
 
 function initMethods (vm: Component, methods: Object) {
   const props = vm.$options.props
+  // 遍历
   for (const key in methods) {
     if (process.env.NODE_ENV !== 'production') {
+      // 对象的每一项必须是函数
       if (typeof methods[key] !== 'function') {
         warn(
           `Method "${key}" has type "${typeof methods[key]}" in the component definition. ` +
@@ -292,6 +298,7 @@ function initMethods (vm: Component, methods: Object) {
           vm
         )
       }
+      // 属性名不不能与data props 相同
       if (props && hasOwn(props, key)) {
         warn(
           `Method "${key}" has already been defined as a prop.`,
@@ -305,6 +312,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
+    // 将方法添加到vm实例上
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }

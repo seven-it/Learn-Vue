@@ -348,7 +348,7 @@ function normalizeProps (options: Object, vm: ?Component) {
         : { type: val }
     }
   } else if (process.env.NODE_ENV !== 'production') {
-    // props 必须是数组或者对象类型
+    // props 必须是数组或者对象类型, 如果两者都不是则报错
     warn(
       `Invalid value for option "props": expected an Array or an Object, ` +
       `but got ${toRawType(props)}.`,
