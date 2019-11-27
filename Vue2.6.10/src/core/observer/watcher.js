@@ -50,10 +50,11 @@ export default class Watcher {
     isRenderWatcher?: boolean
   ) {
     this.vm = vm
+    // 当前watcher是否为渲染watcher
     if (isRenderWatcher) {
       vm._watcher = this
     }
-    // 保存所有的观察者
+    // 保存所有的观察者,但不知到用途
     vm._watchers.push(this)
     // options
     if (options) {
@@ -104,6 +105,7 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
+      // 调用getter ，对属性进行访问 从而触发依赖收集
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -132,6 +134,7 @@ export default class Watcher {
       this.newDepIds.add(id)
       this.newDeps.push(dep)
       if (!this.depIds.has(id)) {
+        // 触发收集方法，将收集watcher
         dep.addSub(this)
       }
     }
@@ -169,6 +172,7 @@ export default class Watcher {
     } else if (this.sync) {
       this.run()
     } else {
+      // 将渲染watcher添加到一个队列中
       queueWatcher(this)
     }
   }
@@ -179,6 +183,7 @@ export default class Watcher {
    */
   run () {
     if (this.active) {
+      // 获取最新的属性值，并收集新的依赖
       const value = this.get()
       if (
         value !== this.value ||

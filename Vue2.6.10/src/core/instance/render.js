@@ -88,7 +88,7 @@ export function renderMixin (Vue: Class<Component>) {
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
       currentRenderingInstance = vm
-      // 将render转换喂vnode
+      // 将render转换喂vnode，这个过程中会对data props中的属性值进行访问，从而触发dep收集渲染watcher
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

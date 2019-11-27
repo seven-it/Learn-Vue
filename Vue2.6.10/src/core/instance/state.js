@@ -37,6 +37,7 @@ const sharedPropertyDefinition = {
 
 export function proxy (target: Object, sourceKey: string, key: string) {
   // 将vm._data中的数据代理到vm实例上，方便给访问与书写
+  // 这里相当于触发了属性的get方法，从而触发依赖收集
   sharedPropertyDefinition.get = function proxyGetter () {
     return this[sourceKey][key]
   }

@@ -41,20 +41,23 @@ export class Observer {
 
   constructor (value: any) {
     this.value = value
-    // 实例化一个收集器
+    // 实例化一个收集器，准备收集watcher
     this.dep = new Dep()
     this.vmCount = 0
     // 将Observer实例对象添加到 vm._data上
     def(value, '__ob__', this)
+    // 如果当前属性值是一个数组
     if (Array.isArray(value)) {
       if (hasProto) {
+        // 重写数组方法并添加到数组原型上
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
       }
+      // 监测数组项
       this.observeArray(value)
     } else {
-      // 为_data对象的所有属性添加getter和setter
+      // 当属性是一个对象时，为对象的所有属性添加getter和setter
       this.walk(value)
     }
   }
@@ -75,6 +78,7 @@ export class Observer {
    * Observe a list of Array items.
    */
   observeArray (items: Array<any>) {
+    // 遍历每个数组选项，递归进行监测，确保某一项为数组或对象时也能监测到
     for (let i = 0, l = items.length; i < l; i++) {
       observe(items[i])
     }
@@ -89,6 +93,7 @@ export class Observer {
  */
 function protoAugment (target, src: Object) {
   /* eslint-disable no-proto */
+  // 重写当前数组方法并添加到隐式原型上
   target.__proto__ = src
   /* eslint-enable no-proto */
 }
@@ -145,32 +150,40 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
-  // 实例化一个收集器
+  // 每个对象属性也有一个对应的收集器
   const dep = new Dep()
 
   // 获取属性的描述信息
   const property = Object.getOwnPropertyDescriptor(obj, key)
+
+  // 属性描述符为false 不可修改
   if (property && property.configurable === false) {
     return
   }
 
   // cater for pre-defined getter/setters
+  // 获取用户自定义的 get set
   const getter = property && property.get
   const setter = property && property.set
+
+  // 判断条件暂时不知为何
   if ((!getter || setter) && arguments.length === 2) {
+    // 获取属性值
     val = obj[key]
   }
 
-  // 如果val是一个对象 那么递归为其添加观察者
+  // 通过递归对深层对象进行监测，确保再深的对象属性也能被监测到
   let childOb = !shallow && observe(val)
 
-  // 对val进行数据劫持，添加get 和 set
+  // 为属性值添加get set属性，将其变为访问器属性
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
+      // 当属性的get被触发时，dep进行依赖收集，收集当前的渲染watcher
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
+        // 触发收集方法
         dep.depend()
         if (childOb) {
           childOb.dep.depend()
@@ -182,8 +195,10 @@ export function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
+      // 当属性值被修改时，会触发set方法
       const value = getter ? getter.call(obj) : val
       /* eslint-disable no-self-compare */
+      // 对比新旧值是否相等
       if (newVal === value || (newVal !== newVal && value !== value)) {
         return
       }
@@ -196,9 +211,12 @@ export function defineReactive (
       if (setter) {
         setter.call(obj, newVal)
       } else {
+        // 将旧值替换为新值
         val = newVal
       }
+      // 新的属性值有可能时一个对象，所以递归进行监测
       childOb = !shallow && observe(newVal)
+      // 通知watcher更新
       dep.notify()
     }
   })
