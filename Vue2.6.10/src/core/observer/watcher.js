@@ -92,6 +92,12 @@ export default class Watcher {
         )
       }
     }
+
+    /**
+     * 如果 lazy 为true，则暂时不对属性进行求值
+     * 已知
+     *    computed 的选项传入的 lazy = true
+     */
     this.value = this.lazy
       ? undefined
       : this.get()

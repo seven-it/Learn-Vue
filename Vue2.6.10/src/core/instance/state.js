@@ -192,6 +192,7 @@ const computedWatcherOptions = { lazy: true }
 
 function initComputed (vm: Component, computed: Object) {
   // $flow-disable-line
+  // 初始化一个computed Watcher
   const watchers = vm._computedWatchers = Object.create(null)
   // computed properties are just getters during SSR
   const isSSR = isServerRendering()
@@ -210,7 +211,10 @@ function initComputed (vm: Component, computed: Object) {
     }
 
     if (!isSSR) {
-      // create internal watcher for the computed property.
+      // create internal watcher for the computed property.true
+      // 创建一个 computed watcher ，
+      // 跟普通Watcher相比，computedWatcher 传入了选项参数 lazy = true
+      // 所以目前只是实例化了一个computedWatcher ，而没有对属性进行求值
       watchers[key] = new Watcher(
         vm,
         getter || noop,
@@ -223,6 +227,7 @@ function initComputed (vm: Component, computed: Object) {
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
     if (!(key in vm)) {
+      // 遍历 vue实例，如果computed 的属性值与vm上的属性不冲突，那么为其添加访问器属性
       defineComputed(vm, key, userDef)
     } else if (process.env.NODE_ENV !== 'production') {
       if (key in vm.$data) {
@@ -235,12 +240,15 @@ function initComputed (vm: Component, computed: Object) {
 }
 
 export function defineComputed (
-  target: any,
-  key: string,
-  userDef: Object | Function
+  target: any, // vue实例
+  key: string, // computed属性
+  userDef: Object | Function // 自定义函数
 ) {
   const shouldCache = !isServerRendering()
+
+  // 通常我们的computed属性值会是一个函数
   if (typeof userDef === 'function') {
+    // computed
     sharedPropertyDefinition.get = shouldCache
       ? createComputedGetter(key)
       : createGetterInvoker(userDef)

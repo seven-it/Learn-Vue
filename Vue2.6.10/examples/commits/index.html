@@ -23,7 +23,7 @@
   </head>
   <body>
     <div id="demo">
-      {{msg}}
+      {{comp}}
     </div>
     <script>
       debugger
@@ -42,7 +42,8 @@
           }
         }
       })
-      vm.msg = "123"
+      console.log(Vue.set)
+      Vue.set(vm.arr,4,123)
     </script>
   </body>
 </html>

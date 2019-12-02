@@ -228,6 +228,7 @@ export function defineReactive (
  * already exist.
  */
 export function set (target: Array<any> | Object, key: any, val: any): any {
+  // 对target做一层判断，必须是对象或数组
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
   ) {
@@ -254,6 +255,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     target[key] = val
     return val
   }
+  // 对新属性进行监测
   defineReactive(ob.value, key, val)
   ob.dep.notify()
   return val
