@@ -36,6 +36,11 @@
             name: '小七'
           }
         },
+        watch: {
+          msg(newVal, oldVal){
+            console.log(newVal + oldVal)
+          }
+        },
         computed: {
           comp: function() {
             return this.msg
@@ -43,7 +48,7 @@
         }
       })
       console.log(Vue.set)
-      Vue.set(vm.arr,4,123)
+      vm.msg = 666
     </script>
   </body>
 </html>

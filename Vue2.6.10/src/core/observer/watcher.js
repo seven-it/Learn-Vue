@@ -107,6 +107,7 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
+    // 保存当前watcher实例，并为Dep.target = this
     pushTarget(this)
     let value
     const vm = this.vm
@@ -220,6 +221,7 @@ export default class Watcher {
    * This only gets called for lazy watchers.
    */
   evaluate () {
+    // 执行 watcher 的 get方法来求值
     this.value = this.get()
     this.dirty = false
   }

@@ -63,6 +63,7 @@ export function initState (vm: Component) {
   // 初始化computed
   if (opts.computed) initComputed(vm, opts.computed)
   if (opts.watch && opts.watch !== nativeWatch) {
+    // 初始化watch
     initWatch(vm, opts.watch)
   }
 }
@@ -199,7 +200,7 @@ function initComputed (vm: Component, computed: Object) {
 
   // 遍历computed的属性
   for (const key in computed) {
-    // 保存属性值，一个函数
+    // 保存属性值，一个函数或对象
     const userDef = computed[key]
     // computed的属性值有两种情况，函数 与 访问器属性
     const getter = typeof userDef === 'function' ? userDef : userDef.get
@@ -274,9 +275,12 @@ export function defineComputed (
 }
 
 function createComputedGetter (key) {
+  // 返回一个函数，作为属性的getter
   return function computedGetter () {
+    // 拿到之前保存的 computed Watcher
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
+      // 为当前属性求值
       if (watcher.dirty) {
         watcher.evaluate()
       }
@@ -334,6 +338,7 @@ function initWatch (vm: Component, watch: Object) {
         createWatcher(vm, key, handler[i])
       }
     } else {
+      // 创建watcher 参数 vue, 属性名，属性值 函数
       createWatcher(vm, key, handler)
     }
   }
@@ -352,6 +357,7 @@ function createWatcher (
   if (typeof handler === 'string') {
     handler = vm[handler]
   }
+  // 最终调用 $watch来创建watcher
   return vm.$watch(expOrFn, handler, options)
 }
 

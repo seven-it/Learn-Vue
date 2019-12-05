@@ -63,13 +63,16 @@ Dep.target = null
 const targetStack = []
 
 export function pushTarget (target: ?Watcher) {
-  // 观察者是全局唯一的，将其添加到Dep上方便收集
+  // 将Watcher入栈，可能在之前已经创建了computed Watcher 或者 watch Watcher
   targetStack.push(target)
+  
+  // 确保当前watcher是全局唯一的 
   Dep.target = target
 }
 
 export function popTarget () {
-  // 依赖收集完成，删除当前watcher,确保全局只有一个watcher
+  // 依赖收集完成，删除当前watcher
   targetStack.pop()
+  // 确保全局只有一个watcher
   Dep.target = targetStack[targetStack.length - 1]
 }
