@@ -168,6 +168,8 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {
    * _base: ƒ Vue(options)
    */
   let options = Ctor.options 
+
+  // 如果当前对象是一个组件
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions

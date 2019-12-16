@@ -27,28 +27,37 @@
     </div>
     <script>
       debugger
+      const renderObj = {
+        name:'app',
+        data: function () {
+          return {
+            count: 0
+          }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+      }
       const vm = new Vue({
         el: '#demo',
-        data: {
-          msg: 'Hello world',
-          arr: [0,1,2,3],
-          obj: {
-            name: '小七'
-          }
-        },
-        watch: {
-          msg(newVal, oldVal){
-            console.log(newVal + oldVal)
-          }
-        },
-        computed: {
-          comp: function() {
-            return this.msg
-          }
-        }
+        render: h => h(renderObj)
+        // data: {
+        //   msg: 'Hello world',
+        //   arr: [0,1,2,3],
+        //   obj: {
+        //     name: '小七'
+        //   }
+        // },
+        // watch: {
+        //   msg(newVal, oldVal){
+        //     console.log(newVal + oldVal)
+        //   }
+        // },
+        // computed: {
+        //   comp: function() {
+        //     return this.msg
+        //   }
+        // }
       })
-      console.log(Vue.set)
-      vm.msg = 666
+      // vm.msg = 666
     </script>
   </body>
 </html>
