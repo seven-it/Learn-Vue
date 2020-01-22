@@ -174,7 +174,7 @@ export function createComponent (
     // abstract components do not keep anything
     // other than props & listeners & slot
 
-    // work around flow
+    // work around flow 
     const slot = data.slot
     data = {}
     if (slot) {
