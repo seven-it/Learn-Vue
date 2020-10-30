@@ -35,7 +35,6 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     // a flag to avoid this being observed
-    // 猜测： vue实例对象不会被observe监测
     vm._isVue = true
 
     // merge options

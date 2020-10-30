@@ -35,7 +35,7 @@ function updateAttrs (oldVnode: VNodeWithData, vnode: VNodeWithData) {
     attrs = vnode.data.attrs = extend({}, attrs)
   }
 
-  for (key in attrs) {
+  for (key in attrs) { // 对比新旧节点属性
     cur = attrs[key]
     old = oldAttrs[key]
     if (old !== cur) {

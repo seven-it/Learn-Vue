@@ -23,41 +23,80 @@
   </head>
   <body>
     <div id="demo">
-      {{comp}}
+      {{msg}}
+      <ul>
+        <li v-on:click="tips(item)" v-for="item in arr" :key="item">{{item}}</li>
+      </ul>
     </div>
     <script>
       debugger
-      const renderObj = {
-        name:'app',
+      // const renderObj = {
+      //   name:'app',
+      //   data: function () {
+      //     return {
+      //       count: 0
+      //     }
+      //   },
+      //   template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+      // }
+      Vue.component('button-counter', {
         data: function () {
           return {
             count: 0
           }
         },
         template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
-      }
+      })
+
+      var CompA = { bb:"bb" }
+      var mixin = {
+            data() {
+              return {
+                
+              }
+            },
+            created: function () { console.log(1) }
+          }
+
       const vm = new Vue({
         el: '#demo',
-        render: h => h(renderObj)
-        // data: {
-        //   msg: 'Hello world',
-        //   arr: [0,1,2,3],
-        //   obj: {
-        //     name: '小七'
-        //   }
-        // },
-        // watch: {
-        //   msg(newVal, oldVal){
-        //     console.log(newVal + oldVal)
-        //   }
-        // },
-        // computed: {
-        //   comp: function() {
-        //     return this.msg
-        //   }
-        // }
+        inject: ['foo'],
+        components:{
+          'button-counter':'button-counter'
+        },
+        extends: CompA,
+        props:{
+          "job": String
+        },
+        data: {
+          msg: 'Hello world',
+          arr: [0,1,2,3],
+          obj: {
+            name: '小七'
+          }
+        },
+        directives: {
+          focus: {
+            // 指令的定义
+            inserted: function (el) {
+              el.focus()
+            }
+          }
+        },
+        methods: {
+          tips(item){
+            alert(item)
+          }
+        },
+        beforeCreate() {
+          console.log('beforeCreate')
+        },
+        created() {
+          console.log('created')
+        },
       })
       // vm.msg = 666
+      debugger
     </script>
   </body>
 </html>

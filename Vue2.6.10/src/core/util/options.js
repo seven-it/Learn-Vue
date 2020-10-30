@@ -421,7 +421,7 @@ export function mergeOptions (
   child: Object,
   vm?: Component
 ): Object {
-  // 是否有components属性
+  // 如果选项中存在 components 属性，那么验证组件的 name 是否合法
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
   }
