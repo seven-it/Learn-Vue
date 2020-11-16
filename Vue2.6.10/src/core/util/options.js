@@ -362,7 +362,7 @@ function normalizeProps (options: Object, vm: ?Component) {
 /**
  * Normalize all injections into Object-based format
  */
-function normalizeInject (options: Object, vm: ?Component) {
+function normalizeInject (options: Object, vm: ?Component) { // 与处理 props 一样，最终将传入的 inject 转换为统一的对象格式
   const inject = options.inject
   if (!inject) return
   const normalized = options.inject = {}
@@ -431,19 +431,17 @@ export function mergeOptions (
     child = child.options
   }
 
-  // 如果选项对象中存在props，将props与props属性转为Object 类型
-  normalizeProps(child, vm)
-  // 如果存在inject属性，对其进行一些操作
-  normalizeInject(child, vm)
-  // 如果存在directives属性，对其进行一些操作
-  normalizeDirectives(child)
+ // 因为 props ，inject ,directives 都支持array object 统一转为 object
+  normalizeProps(child, vm)  // 将 props  进行统一的格式化
+  normalizeInject(child, vm) // 将 inject 进行统一的格式化
+  normalizeDirectives(child) // 将 directives 进行统一的格式化
 
   // Apply extends and mixins on the child options,
   // but only if it is a raw options object that isn't
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
   if (!child._base) {
-    // 如果存在extends属性，对其进行一些操作
+    // 如果存在extends属性，递归调用 mergeOptions 进行选项合并
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
     }

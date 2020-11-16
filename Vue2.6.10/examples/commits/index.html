@@ -39,20 +39,12 @@
       //   },
       //   template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
       // }
-      Vue.component('button-counter', {
-        data: function () {
-          return {
-            count: 0
-          }
-        },
-        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
-      })
-
+      
       var CompA = { bb:"bb" }
       var mixin = {
             data() {
               return {
-                
+                cc: "cc"
               }
             },
             created: function () { console.log(1) }
@@ -61,6 +53,7 @@
       const vm = new Vue({
         el: '#demo',
         inject: ['foo'],
+        mixins: [mixin],
         components:{
           'button-counter':'button-counter'
         },
@@ -94,6 +87,15 @@
         created() {
           console.log('created')
         },
+      })
+
+      Vue.component('button-counter', {
+        data: function () {
+          return {
+            count: 0
+          }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
       })
       // vm.msg = 666
       debugger
