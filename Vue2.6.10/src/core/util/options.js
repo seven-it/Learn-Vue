@@ -150,19 +150,19 @@ function mergeHook (
   parentVal: ?Array<Function>,
   childVal: ?Function | ?Array<Function>
 ): ?Array<Function> {
-  const res = childVal
-    ? parentVal
-      ? parentVal.concat(childVal)
-      : Array.isArray(childVal)
+  const res = childVal  // 先看 child 中是否包含钩子
+    ? parentVal          // 再看 parent 中是否包含钩子 （mixin 或者 extend）
+      ? parentVal.concat(childVal)    // 直接合并到 parent 中
+      : Array.isArray(childVal)  // parent 中没有钩子 将 child 中的钩子数组化
         ? childVal
         : [childVal]
-    : parentVal
+    : parentVal         // child中没有钩子 直接返回 parent
   return res
     ? dedupeHooks(res)
     : res
 }
 
-function dedupeHooks (hooks) {
+function dedupeHooks (hooks) { //去除重复的钩子
   const res = []
   for (let i = 0; i < hooks.length; i++) {
     if (res.indexOf(hooks[i]) === -1) {
@@ -460,10 +460,10 @@ export function mergeOptions (
   const options = {}  
   let key
   for (key in parent) {
-    mergeField(key) // 合并域
+    mergeField(key) // 首先处理父节点的属性
   }
   for (key in child) {
-    if (!hasOwn(parent, key)) {
+    if (!hasOwn(parent, key)) { // 因为父子节点包含同名属性时 父节点已经对该属性做了处理，子节点可直接跳过该属性
       mergeField(key)
     }
   }

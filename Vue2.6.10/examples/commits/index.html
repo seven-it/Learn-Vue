@@ -49,11 +49,25 @@
             },
             created: function () { console.log(1) }
           }
+          var mixin2 = {
+            data() {
+              return {
+                dd: "dd"
+              }
+            },
+            created: function () { console.log(1) }
+          }
 
       const vm = new Vue({
         el: '#demo',
         inject: ['foo'],
-        mixins: [mixin],
+        mixins: [mixin,mixin2],
+        computed: {
+          
+        },
+        watch: {
+          
+        },
         components:{
           'button-counter':'button-counter'
         },
