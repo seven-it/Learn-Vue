@@ -15,13 +15,14 @@ export function initEvents (vm: Component) {
   // init parent attached events
   const listeners = vm.$options._parentListeners
   if (listeners) {
+    debugger
     updateComponentListeners(vm, listeners)
   }
 }
 
 let target: any
 
-function add (event, fn) {
+function add (event, fn) { 
   target.$on(event, fn)
 }
 
@@ -116,6 +117,7 @@ export function eventsMixin (Vue: Class<Component>) {
   }
 
   Vue.prototype.$emit = function (event: string): Component {
+    debugger
     const vm: Component = this
     if (process.env.NODE_ENV !== 'production') {
       const lowerCaseEvent = event.toLowerCase()

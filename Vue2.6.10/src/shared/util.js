@@ -50,7 +50,6 @@ const _toString = Object.prototype.toString
 export function toRawType (value: any): string {
   return _toString.call(value).slice(8, -1)
 }
-
 /**
  * Strict object type check. Only returns true
  * for plain JavaScript objects.

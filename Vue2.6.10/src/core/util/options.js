@@ -440,7 +440,7 @@ export function mergeOptions (
   // but only if it is a raw options object that isn't
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
-  if (!child._base) {
+  if (!child._base) { // 只有没有被 merageOptions 函数处理的对象才没有 _base 属性，即全新的对象
     // 如果存在extends属性，递归调用 mergeOptions 进行选项合并
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)

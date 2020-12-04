@@ -148,7 +148,7 @@ export function createComponent (
 
   // resolve constructor options in case global mixins are applied after
   // component constructor creation
-  resolveConstructorOptions(Ctor)
+  resolveConstructorOptions(Ctor) //创建组件构造函数
 
   // transform component v-model data into props & events
   if (isDef(data.model)) {
@@ -165,7 +165,7 @@ export function createComponent (
 
   // extract listeners, since these needs to be treated as
   // child component listeners instead of DOM listeners
-  const listeners = data.on
+  const listeners = data.on  // 这里子组件监听器
   // replace with listeners with .native modifier
   // so it gets processed during parent component patch.
   data.on = data.nativeOn
@@ -220,6 +220,7 @@ export function createComponentInstanceForVnode (
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
+  debugger
   return new vnode.componentOptions.Ctor(options)
 }
 

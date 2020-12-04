@@ -31,6 +31,7 @@ export function setActiveInstance(vm: Component) {
 
 // 这个函数主要就是进行属性的初始化操作
 export function initLifecycle (vm: Component) {
+  
   const options = vm.$options
 
   // locate first non-abstract parent

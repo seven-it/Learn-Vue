@@ -53,8 +53,8 @@ export function initMixin (Vue: Class<Component>) {
        * 合并完成挂在到实例对象的$options属性上
        */
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor), // 解析构造函数选项
-        options || {},
+        resolveConstructorOptions(vm.constructor), // vue自定义的内置属性
+        options || {},  // 用户传入的选项对象
         vm
       )
     }
@@ -68,7 +68,6 @@ export function initMixin (Vue: Class<Component>) {
     }
     
     // expose real self
-    // 疑问？ _self有什么用
     vm._self = vm
 
     /**

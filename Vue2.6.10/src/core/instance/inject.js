@@ -14,9 +14,9 @@ export function initProvide (vm: Component) {
 }
 
 export function initInjections (vm: Component) {
-  const result = resolveInject(vm.$options.inject, vm)
+  const result = resolveInject(vm.$options.inject, vm)  // 对 inject 属性值进行验证，去除非法属性值
   if (result) {
-    toggleObserving(false)
+    toggleObserving(false)                // 将全局属性 shouldObserve = false 当该属性为 false 时，将不会进行 observe 的操作
     Object.keys(result).forEach(key => {
       /* istanbul ignore else */
       if (process.env.NODE_ENV !== 'production') {
@@ -53,7 +53,7 @@ export function resolveInject (inject: any, vm: Component): ?Object {
       while (source) {
         if (source._provided && hasOwn(source._provided, provideKey)) {
           result[key] = source._provided[provideKey]
-          break
+          break 
         }
         source = source.$parent
       }
