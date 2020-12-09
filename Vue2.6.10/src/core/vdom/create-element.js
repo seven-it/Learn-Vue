@@ -90,7 +90,7 @@ export function _createElement (
   if (normalizationType === ALWAYS_NORMALIZE) {
     children = normalizeChildren(children)
   } else if (normalizationType === SIMPLE_NORMALIZE) {
-    children = simpleNormalizeChildren(children)
+    children = simpleNormalizeChildren(children) // 扁平化 children 数组，因为children有可能是多维数组
   }
   let vnode, ns
   if (typeof tag === 'string') {
@@ -104,10 +104,10 @@ export function _createElement (
           context
         )
       }
-      vnode = new VNode(
+      vnode = new VNode(   // 创建 html 原生节点的 vnode
         config.parsePlatformTagName(tag), data, children,
         undefined, undefined, context
-      ) // 创建 html 原生节点的 vnode
+      ) 
     } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) { // 
       // component  创建子组件 vnode vue-component-name
       vnode = createComponent(Ctor, data, context, children, tag)

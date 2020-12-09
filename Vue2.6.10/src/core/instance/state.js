@@ -48,7 +48,7 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 }
 
 export function initState (vm: Component) {
-  vm._watchers = []  // 暂时不知
+  vm._watchers = []  // 初始化一个用来保存当前组件 watcher 的数组
   const opts = vm.$options // 保存选项对象
   if (opts.props) initProps(vm, opts.props) // 如果有props 初始化
   if (opts.methods) initMethods(vm, opts.methods) // 初始化methods
@@ -73,14 +73,14 @@ function initProps (vm: Component, propsOptions: Object) {
    * propsData 
    * vue提供的api，类似于props的初始数据 default
    */
-  const propsData = vm.$options.propsData || {}
-  // 为vm添加一个_props属性，应该与_data属性的作用类似
-  const props = vm._props = {}
+  const propsData = vm.$options.propsData || {} // 父组件传入得值
+  
+  const props = vm._props = {} // 为vm添加一个 _props 属性，之后 props 中得属性会添加到上面
   // cache prop keys so that future props updates can iterate using Array
   // instead of dynamic object key enumeration.
   const keys = vm.$options._propKeys = []
   const isRoot = !vm.$parent
-  // root instance props should be converted
+  // root instance props should be converted  只有根实例上的 props 属性需要进行 observer 操作，子组件不要
   if (!isRoot) {
     toggleObserving(false)
   }
@@ -88,11 +88,11 @@ function initProps (vm: Component, propsOptions: Object) {
   // 遍历props 中的属性
   for (const key in propsOptions) {
     keys.push(key)
-    // 对属性值进行校验
+    // 属性值类型校验 并返回属性值
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
-      const hyphenatedKey = hyphenate(key)
+      const hyphenatedKey = hyphenate(key) // 确保属性名不是保留字
       if (isReservedAttribute(hyphenatedKey) ||
           config.isReservedAttr(hyphenatedKey)) {
         warn(
@@ -112,13 +112,13 @@ function initProps (vm: Component, propsOptions: Object) {
         }
       })
     } else {
-      defineReactive(props, key, value)
+      defineReactive(props, key, value) // 将属性添加到 _props 属性上
     }
     // static props are already proxied on the component's prototype
     // during Vue.extend(). We only need to proxy props defined at
     // instantiation here.
     if (!(key in vm)) {
-      proxy(vm, `_props`, key)
+      proxy(vm, `_props`, key) // 将属性代理到 vm 实例上，这样可以直接通过 vm.key 来访问属性
     }
   }
   toggleObserving(true)

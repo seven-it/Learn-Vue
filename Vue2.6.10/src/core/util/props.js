@@ -30,9 +30,9 @@ export function validateProp (
   // 获取自定义的初始值，没有定义则为undefined
   let value = propsData[key]
   // boolean casting
-  const booleanIndex = getTypeIndex(Boolean, prop.type)
+  const booleanIndex = getTypeIndex(Boolean, prop.type) // 查看当前属性的 type 是否是 boolean
   if (booleanIndex > -1) {
-    if (absent && !hasOwn(prop, 'default')) {
+    if (absent && !hasOwn(prop, 'default')) {  // 如果当前属性是 boolean 类型并且没有默认值，那么默认值设置为 false
       value = false
     } else if (value === '' || value === hyphenate(key)) {
       // only cast empty string / same name to boolean if
@@ -44,7 +44,7 @@ export function validateProp (
     }
   }
   // check default value
-  // 检测属性是否存在默认值
+  // 如果 父组件没有为 props传值，那么 value 目前是 undefined ,这时需要获取 props 属性得默认值
   if (value === undefined) {
     // 获取默认值
     value = getPropDefaultValue(vm, prop, key)
@@ -78,7 +78,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   if (process.env.NODE_ENV !== 'production' && isObject(def)) {
     warn(
       'Invalid default value for prop "' + key + '": ' +
-      'Props with type Object/Array must use a factory function ' +
+      'Props with type Object/Array must use a f actory function ' +
       'to return the default value.',
       vm
     )
@@ -89,7 +89,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
     vm.$options.propsData[key] === undefined &&
     vm._props[key] !== undefined
   ) {
-    return vm._props[key]
+    return vm._props[key]  // 
   }
   // call factory function for non-Function types
   // a value is Function if its prototype is function even across different execution context
@@ -117,17 +117,17 @@ function assertProp (
     )
     return
   }
-  // 如果值为undefined 则不需要验证了
+  // 如果值为 null  则不需要验证了
   if (value == null && !prop.required) {
     return
   }
-  // 获取到对应的type，如果props是Array类型那么type为null
+  // 获取到对应的type
   let type = prop.type
   //  验证开关
   let valid = !type || type === true
   const expectedTypes = []
 
-  // 如果定义了有效类型，那么验证该值是否符合该类型
+ 
   if (type) {
     // type必须是一个数组，如果不是那就转为数组
     if (!Array.isArray(type)) {

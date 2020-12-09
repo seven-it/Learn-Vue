@@ -28,7 +28,7 @@ export function initRender (vm: Component) {
   // so that we get proper render context inside it.
   // args order: tag, data, children, normalizationType, alwaysNormalize
   // internal version is used by render functions compiled from templates
-  vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
+  vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false) // render 函数创建标签节点 vnode
   // normalization is always applied for the public version, used in
   // user-written render functions.
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
@@ -67,7 +67,7 @@ export function renderMixin (Vue: Class<Component>) {
   }
 
   Vue.prototype._render = function (): VNode {
-    const vm: Component = this
+    const vm: Component = this                  // 组件实例
     const { render, _parentVnode } = vm.$options
 
     if (_parentVnode) {
@@ -88,7 +88,7 @@ export function renderMixin (Vue: Class<Component>) {
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
       currentRenderingInstance = vm
-      // 将render转换喂vnode，这个过程中会对data props中的属性值进行访问，从而触发dep收集渲染watcher
+      // 将render转换喂vnode，这个过程中会对data props中的属性值进行访问，从而触发 dep 收集 渲染watcher
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

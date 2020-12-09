@@ -50,17 +50,17 @@ export default class Watcher {
     isRenderWatcher?: boolean
   ) {
     this.vm = vm
-    // 当前watcher是否为渲染watcher
+    
     if (isRenderWatcher) {
-      vm._watcher = this
+      vm._watcher = this     // 渲染 watcher 会收集当前 render 中包含的所有 watcher
     }
-    // 保存所有的观察者,但不知到用途
+    // 保存当前组件中的所有观察者
     vm._watchers.push(this)
     // options
     if (options) {
       this.deep = !!options.deep
-      this.user = !!options.user
-      this.lazy = !!options.lazy
+      this.user = !!options.user  // watch watcher user = true
+      this.lazy = !!options.lazy  // computed watcher lazy = true
       this.sync = !!options.sync
       this.before = options.before
     } else {

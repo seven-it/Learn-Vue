@@ -44,10 +44,10 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
-      const child = vnode.componentInstance = createComponentInstanceForVnode(
+      const child = vnode.componentInstance = createComponentInstanceForVnode( // 创建自定义组件实例 接下来挂载
         vnode,
         activeInstance
-      )
+      ) 
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     }
   },
@@ -156,7 +156,7 @@ export function createComponent (
   }
 
   // extract props
-  const propsData = extractPropsFromVNodeData(data, Ctor, tag)
+  const propsData = extractPropsFromVNodeData(data, Ctor, tag) // 验证组件属性值是否合法
 
   // functional component
   if (isTrue(Ctor.options.functional)) {
@@ -183,11 +183,11 @@ export function createComponent (
   }
 
   // install component management hooks onto the placeholder node
-  installComponentHooks(data)
+  installComponentHooks(data) // 创建组件钩子
 
   // return a placeholder vnode
   const name = Ctor.options.name || tag
-  const vnode = new VNode(
+  const vnode = new VNode( // 这里创建的只是一个占位符 Vnode，真正渲染的是其内部定义的 dom 节点
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
     data, undefined, undefined, undefined, context,
     { Ctor, propsData, listeners, tag, children },
@@ -220,7 +220,6 @@ export function createComponentInstanceForVnode (
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
-  debugger
   return new vnode.componentOptions.Ctor(options)
 }
 

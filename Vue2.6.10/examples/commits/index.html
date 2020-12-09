@@ -23,6 +23,7 @@
   </head>
   <body>
     <div id="demo">
+      {{cd}}
       <button-counter v-on:click="tips"></button-counter>
     </div>
     <script>
@@ -73,10 +74,14 @@
         inject: ['foo'],
         mixins: [mixin,mixin2],
         computed: {
-          
+          cd(){
+            return this.isNaN
+          }
         },
         watch: {
-          
+          isNaN(val){
+            console.log(val)
+          }
         },
         components:{
           'a-.':'a-.'
@@ -87,7 +92,11 @@
             type: Number,
             default: 0,
           },
-          "jj-ad": String
+          "jj-ad": String,
+          "bv": {
+            type: [String, Boolean],
+            default: ''
+          }
         },
         data: {
           isNaN: 'Hello world',

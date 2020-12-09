@@ -216,6 +216,7 @@ export function defineReactive (
       }
       // 新的属性值有可能时一个对象，所以递归进行监测
       childOb = !shallow && observe(newVal)
+      debugger
       // 通知watcher更新
       dep.notify()
     }

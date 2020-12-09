@@ -34,7 +34,7 @@ Vue.prototype.$mount = function (
 
   const options = this.$options // 保存选项对象
   // resolve template/el and convert to render function
-  // 选项中不存在render时命中
+  // 如果用户传入了 render 函数那么直接去挂载
   if (!options.render) {
     let template = options.template
     //选项中存在template时命中
@@ -88,8 +88,7 @@ Vue.prototype.$mount = function (
     }
   }
 
-  // 继续调用$mount ，通过第一次执行$mount ，
-  // options中必包含render,这次调用就为了解析render函数实现最终挂在
+  // 拿到 render 函数后开始真正的挂载
   return mount.call(this, el, hydrating)
 }
 

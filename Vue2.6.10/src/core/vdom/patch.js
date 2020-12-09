@@ -188,7 +188,7 @@ export function createPatchFunction (backend) {
           insert(parentElm, vnode.elm, refElm)
         }
       } else {
-        createChildren(vnode, children, insertedVnodeQueue)
+        createChildren(vnode, children, insertedVnodeQueue)  // 创建子节点
         if (isDef(data)) {
           invokeCreateHooks(vnode, insertedVnodeQueue)
         }
@@ -199,10 +199,10 @@ export function createPatchFunction (backend) {
         creatingElmInVPre--
       }
     } else if (isTrue(vnode.isComment)) {
-      vnode.elm = nodeOps.createComment(vnode.text)
+      vnode.elm = nodeOps.createComment(vnode.text) // 创建注释节点
       insert(parentElm, vnode.elm, refElm)
     } else {
-      vnode.elm = nodeOps.createTextNode(vnode.text)
+      vnode.elm = nodeOps.createTextNode(vnode.text) //创建文本节点并插入
       insert(parentElm, vnode.elm, refElm)
     }
   }
@@ -284,9 +284,9 @@ export function createPatchFunction (backend) {
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
       if (process.env.NODE_ENV !== 'production') {
-        checkDuplicateKeys(children)
+        checkDuplicateKeys(children) // 检查 key 是否又重复
       }
-      for (let i = 0; i < children.length; ++i) {
+      for (let i = 0; i < children.length; ++i) { // 遍历创建子节点
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true, children, i)
       }
     } else if (isPrimitive(vnode.text)) {
@@ -708,7 +708,7 @@ export function createPatchFunction (backend) {
 
     if (isUndef(oldVnode)) {
       // empty mount (likely as component), create new root element
-      isInitialPatch = true
+      isInitialPatch = true 
       createElm(vnode, insertedVnodeQueue)
     } else {
       const isRealElement = isDef(oldVnode.nodeType)
@@ -743,11 +743,11 @@ export function createPatchFunction (backend) {
           oldVnode = emptyNodeAt(oldVnode)
         }
 
-        // replacing existing element
+        // replacing existing element 获取到待插入节点的父节点
         const oldElm = oldVnode.elm
         const parentElm = nodeOps.parentNode(oldElm)
 
-        // create new node
+        // create new node 创建待插入的节点
         createElm(
           vnode,
           insertedVnodeQueue,
