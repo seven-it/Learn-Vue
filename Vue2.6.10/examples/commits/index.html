@@ -23,8 +23,8 @@
   </head>
   <body>
     <div id="demo">
-      {{cd}}
-      <button-counter v-on:click="tips"></button-counter>
+      <span>{{cd}}</span>
+      <span v-for="item in arr" :key="item">{{item}}</span>
     </div>
     <script>
       debugger
@@ -100,7 +100,7 @@
         },
         data: {
           isNaN: 'Hello world',
-          arr: [0,1,2,3],
+          arr: [0],
           obj: {
             name: '小七'
           }
